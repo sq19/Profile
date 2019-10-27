@@ -3,12 +3,23 @@ import {Modal, Text, TouchableHighlight, View, StyleSheet} from 'react-native';
 import AddMoneyTextBox from './AddMoneyTextBox.js';
 
 export default class AddMoneyPage extends React.Component {
-  state = {
-    modalVisible: false,
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      modalVisible: false,
+      currentInputValue: 0,
+    };
+    this.setModalVisible = this.setModalVisible.bind(this);
+    this.setCurrentInputValue = this.setCurrentInputValue.bind(this);
+  }
+
 
   setModalVisible(visible) {
     this.setState({modalVisible: visible});
+  }
+
+  setCurrentInputValue(value) {
+    this.setState({currentInputValue: value})
   }
 
   render() {
@@ -29,14 +40,15 @@ export default class AddMoneyPage extends React.Component {
                 How much money would you like to add?
               </Text>
 
-              <AddMoneyTextBox/>
+              <AddMoneyTextBox setCurrentInputValue={this.setCurrentInputValue}/>
 
               <TouchableHighlight
                 onPress={() => {
                   this.setModalVisible(!this.state.modalVisible);
+                  //this.props.addToBalance(this.state.currentInputValue);
                 }}>
                 <Text style={styles.descriptionText}>
-                  Save and Close
+                  Close
                 </Text>
               </TouchableHighlight>
             </View>

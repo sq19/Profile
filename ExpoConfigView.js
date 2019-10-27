@@ -1,25 +1,42 @@
 import Constants from 'expo-constants';
 import React from 'react';
-import { SectionList, Image, StyleSheet, Text, View } from 'react-native';
+import { Button, SectionList, Image, StyleSheet, Text, View, Alert, ScrollView } from 'react-native';
 import AddMoneyButton from "./AddMoneyButton.js";
 import AddMoneyPage from './AddMoneyPage.js';
 
+var userData = require('../../../data.json');
+
 export default class ExpoConfigView extends React.Component {
+
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
-    this.state = {balance: '0'}
+    this.updateValue = this.updateValue.bind(this);
+    this.state = {balance: userData.users[0].balance, screenVisible: true};
   }
 
   handleChange(e) {
     this.setState({balance: e.target.value});
   }
 
+  // addToBalance(evt) {
+  //   this.setState({balance: this.state.balance + evt.value})
+  // }
+
+ // componentDidMount() {
+ //    Alert.alert('hi arunav');
+ //  }
+
+  updateValue() {
+    this.forceUpdate();
+    Alert.alert("balance updated!");
+  }
+
   render() {
     const { manifest = {} } = Constants;
     const balance = this.state.balance;
     const sections = [
-      { data: [{ value: '$' + balance }], title: 'Balance' }, //make the value a variable that can be added to
+      { data: [{ value: '$' + userData.users[0].balance }], title: 'Balance' }, //make the value a variable that can be added to
       // { data: [{ value: '$100' }], title: 'Balance' },
       // { data: [{ value: manifest.version }], title: 'version' },
       // { data: [{ value: manifest.orientation }], title: 'orientation' },
@@ -60,16 +77,21 @@ export default class ExpoConfigView extends React.Component {
 
     return (
       <View style={{flex: 1}}>
-        <SectionList
-          style={styles.container}
-          renderItem={this._renderItem}
-          renderSectionHeader={this._renderSectionHeader}
-          stickySectionHeadersEnabled={true}
-          keyExtractor={(item, index) => index}
-          ListHeaderComponent={ListHeader}
-          sections={sections}
-        />
-        <AddMoneyPage/>
+          <SectionList
+            style={styles.container}
+            renderItem={this._renderItem}
+            renderSectionHeader={this._renderSectionHeader}
+            stickySectionHeadersEnabled={true}
+            keyExtractor={(item, index) => index}
+            ListHeaderComponent={ListHeader}
+            sections={sections}
+          />
+          <AddMoneyPage/>
+          <Button title="Update Balance" onPress={() => {
+            this.updateValue();
+          }}>
+            <Text>Update Balance</Text>
+          </Button>
       </View>
       // Edit card info page should be added
       // Edit password page should also be added
